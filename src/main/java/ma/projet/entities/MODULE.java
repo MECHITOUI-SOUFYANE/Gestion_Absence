@@ -15,11 +15,11 @@ import lombok.ToString
 @NoArgsConstructor
 public class MODULE {
 //i think id de module est auto increment
-	private @Id @GeneratedValue Long id_module;
-	  private Long ID_dep;
+	private @Id @GeneratedValue Long idModule;
+	  private Long idDepartement;
 	  private Long som;
-	  private Long id_niveau;
-	  private String nom_mod;
+	  private Long idNiveau;
+	  private String nomModule;
 	  
 	  
 	
@@ -31,18 +31,18 @@ public class MODULE {
 	    if (!(o instanceof MODULE))
 	      return false;
 	    MODULE module = (MODULE) o;
-	    return Objects.equals(this.id_niveau, module.id_niveau) && Objects.equals(this.nom_mod, module.nom_mod); 
+	    return Objects.equals(this.idNiveau, module.idNiveau) && Objects.equals(this.nomModule, module.nomModule); 
 	      
 	  }
 
 	  @Override
 	  public int hashCode() {
-	    return Objects.hash(this.id_module, this.nom_mod, this.id_niveau,this.som,this.ID_dep);
+	    return Objects.hash(this.idModule, this.nomModule, this.idNiveau,this.som,this.idDepartement);
 	  }
 
 	  @Override
 	  public String toString() {
-	    return "module{" + "id=" + this.id_module + ", name='" + this.nom_mod +" " +" a le chef: " +this.som +" a niveau "+this.id_niveau+ '\'' + '}';
+	    return "module{" + "id=" + this.idModule + ", name='" + this.nomModule +" " +" a le chef: " +this.som +" a niveau "+this.idNiveau+ '\'' + '}';
 	  }
 	  
 	  

@@ -16,9 +16,9 @@ import lombok.ToString
 
 public class FILIERE {
 	
-	private @Id @GeneratedValue Long ID_filier;
-	  private Long ID_CHEF_fil;
-	  private String nom_fil;
+	private @Id @GeneratedValue Long idFilier;
+	  private Long idChefFilier;
+	  private String nomFilier;
 	  
 
 	  
@@ -30,17 +30,17 @@ public class FILIERE {
 	    if (!(o instanceof FILIERE))
 	      return false;
 	    FILIERE filiere = (FILIERE) o;
-	    return Objects.equals(this.nom_fil, filiere.nom_fil);
+	    return Objects.equals(this.nomFilier, filiere.nomFilier);
 	  }
 
 	  @Override
 	  public int hashCode() {
-	    return Objects.hash(this.ID_filier, this.nom_fil, this.ID_CHEF_fil);
+	    return Objects.hash(this.idFilier, this.nomFilier, this.idChefFilier);
 	  }
 
 	  @Override
 	  public String toString() {
-	    return "FILIERE{" + "id=" + this.ID_filier + ", name='" + this.nom_fil + '\'' + ", a chef de code som='" + this.ID_CHEF_fil + '\'' + '}';
+	    return "FILIERE{" + "id=" + this.idFilier + ", name='" + this.nomFilier + '\'' + ", a chef de code som='" + this.idChefFilier + '\'' + '}';
 	  }
 	
 

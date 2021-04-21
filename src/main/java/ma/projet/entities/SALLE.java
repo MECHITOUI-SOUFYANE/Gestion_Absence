@@ -15,9 +15,9 @@ import lombok.ToString
 @NoArgsConstructor
 
 public class SALLE {
-	private @Id @GeneratedValue Long id_salle;
-	  private String Bloc;
-	  private String nom_salle;
+	private @Id @GeneratedValue Long idSalle;
+	  private String bloc;
+	  private String nomSalle;
 	  
 	
 	@Override
@@ -28,17 +28,17 @@ public class SALLE {
 	    if (!(o instanceof SALLE))
 	      return false;
 	    SALLE salle = (SALLE) o;
-	    return Objects.equals(this.Bloc,salle.Bloc) && Objects.equals(this.nom_salle,salle.nom_salle); 
+	    return Objects.equals(this.bloc,salle.bloc) && Objects.equals(this.nomSalle,salle.nomSalle); 
 	      
 	  }
 
 	  @Override
 	  public int hashCode() {
-	    return Objects.hash(this.id_salle, this.nom_salle, this.Bloc);
+	    return Objects.hash(this.idSalle, this.nomSalle, this.bloc);
 	  }
 	  
 	 @Override
 	  public String toString() {
-	    return "salle{" + "id=" + this.id_salle + ", nom='" + this.nom_salle +"a le bloc "+this.Bloc+'\'' + '}';
+	    return "salle{" + "id=" + this.idSalle + ", nom='" + this.nomSalle +"a le bloc "+this.bloc+'\'' + '}';
 	  }
 }

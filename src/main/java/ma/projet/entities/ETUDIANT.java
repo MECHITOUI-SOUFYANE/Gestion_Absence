@@ -14,9 +14,9 @@ import lombok.ToString
 @Data
 @NoArgsConstructor
 public class ETUDIANT {
-	private @Id  Long NUM_APOGEE;
+	private @Id  Long numApogee;
 	//pourquoi on besoin d un id module si lid de niveau
-	  private Long ID_niveau;
+	  private Long idNiveau;
 	  private String cne;
 	  private String nom;
 	  private String prenom;
@@ -30,17 +30,17 @@ public class ETUDIANT {
 	    if (!(o instanceof ETUDIANT))
 	      return false;
 	    ETUDIANT etudiant = (ETUDIANT) o;
-	    return Objects.equals(this.NUM_APOGEE, etudiant.NUM_APOGEE); 
+	    return Objects.equals(this.numApogee, etudiant.numApogee); 
 	      
 	  }
 
 	  @Override
 	  public int hashCode() {
-	    return Objects.hash(this.NUM_APOGEE, this.nom, this.prenom,this.cne,this.ID_niveau);
+	    return Objects.hash(this.numApogee, this.nom, this.prenom,this.cne,this.idNiveau);
 	  }
 
 	  @Override
 	  public String toString() {
-	    return "ETUDIANT{" + "apogee=" + this.NUM_APOGEE + ", name='" + this.nom +" " +this.prenom +" cne: " +this.cne +" a niveau "+this.ID_niveau+ '\'' + '}';
+	    return "ETUDIANT{" + "apogee=" + this.numApogee + ", name='" + this.nom +" " +this.prenom +" cne: " +this.cne +" a niveau "+this.idNiveau+ '\'' + '}';
 	  }
 }

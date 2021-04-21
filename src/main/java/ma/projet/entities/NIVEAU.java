@@ -14,8 +14,8 @@ import lombok.ToString
 @Data
 @NoArgsConstructor
 public class NIVEAU {
-	private @Id @GeneratedValue Long id_niveau;
-	private long id_filiere;
+	private @Id @GeneratedValue Long idNiveau;
+	private long idFiliere;
 	
 	
 	 @Override
@@ -26,18 +26,18 @@ public class NIVEAU {
 	    if (!(o instanceof MODULE))
 	      return false;
 	    NIVEAU niveau = (NIVEAU) o;
-	    return Objects.equals(this.id_niveau, niveau.id_niveau) && Objects.equals(this.id_filiere, niveau.id_filiere); 
+	    return Objects.equals(this.idNiveau, niveau.idNiveau) && Objects.equals(this.idFiliere, niveau.idFiliere); 
 	      
 	  }
 
 	  @Override
 	  public int hashCode() {
-	    return Objects.hash(this.id_niveau, this.id_filiere);
+	    return Objects.hash(this.idNiveau, this.idFiliere);
 	  }
 
 	  @Override
 	  public String toString() {
-	    return "niveau{" + "id=" + this.id_niveau + " a filier "+this.id_filiere+ '\'' + '}';
+	    return "niveau{" + "id=" + this.idNiveau + " a filier "+this.idFiliere+ '\'' + '}';
 	  }
 	  
 	

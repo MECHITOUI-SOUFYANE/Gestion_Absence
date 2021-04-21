@@ -15,9 +15,9 @@ import lombok.ToString
 
 
 public class PROFESSEUR {
-	//SOM n est pas auto increment;
-	  private @Id @GeneratedValue Long SOM;
-	  private Long ID_DEP;
+	//som n est pas auto increment;
+	  private @Id @GeneratedValue Long som;
+	  private Long idDepartement;
 	  private String nom;
 	  private String prenom;
 	  private String password;
@@ -31,18 +31,18 @@ public class PROFESSEUR {
 	    if (!(o instanceof PROFESSEUR))
 	      return false;
 	    PROFESSEUR professeur = (PROFESSEUR) o;
-	    return Objects.equals(this.SOM, professeur.SOM); 
+	    return Objects.equals(this.som, professeur.som); 
 	      
 	  }
 
 	  @Override
 	  public int hashCode() {
-	    return Objects.hash(this.SOM, this.nom, this.prenom,this.password);
+	    return Objects.hash(this.som, this.nom, this.prenom,this.password);
 	  }
 
 	  @Override
 	  public String toString() {
-	    return "Professeur{" + "SOM=" + this.SOM + ", name='" + this.nom +" " +this.prenom + '\'' + '}';
+	    return "Professeur{" + "som=" + this.som + ", name='" + this.nom +" " +this.prenom + '\'' + '}';
 	  }
 	  
 }

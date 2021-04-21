@@ -15,9 +15,9 @@ import lombok.ToString
 @NoArgsConstructor
 
 public class DEPARTEMENT {
-	  private @Id @GeneratedValue Long ID_DEP;
-	  private Long ID_CHEF_DEP;
-	  private String Nom;
+	  private @Id @GeneratedValue Long idDepartement;
+	  private Long idChefDepartement;
+	  private String nom;
 	  
 	
 	  
@@ -29,16 +29,16 @@ public class DEPARTEMENT {
 	    if (!(o instanceof DEPARTEMENT))
 	      return false;
 	    DEPARTEMENT departement = (DEPARTEMENT) o;
-	    return Objects.equals(this.Nom, departement.Nom);
+	    return Objects.equals(this.nom, departement.nom);
 	  }
 
 	  @Override
-	  public int hashCode() {	    return Objects.hash(this.ID_DEP, this.Nom, this.ID_CHEF_DEP);
+	  public int hashCode() {	    return Objects.hash(this.idDepartement, this.nom, this.idChefDepartement);
 	  }
 
 	  @Override
 	  public String toString() {
-	    return "departement{" + "id=" + this.ID_DEP + ", name='" + this.Nom + '\'' + ", a chef de code som='" + this.ID_CHEF_DEP + '\'' + '}';
+	    return "departement{" + "id=" + this.idDepartement + ", name='" + this.nom + '\'' + ", a chef de code som='" + this.idChefDepartement + '\'' + '}';
 	  }
 
 }

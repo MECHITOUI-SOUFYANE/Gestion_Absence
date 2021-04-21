@@ -17,10 +17,10 @@ import lombok.ToString
 
 public class MATIER {
 	//i think id de matier est auto increment
-		private @Id @GeneratedValue Long id_matier;
-		  private Long ID_mod;
+		private @Id @GeneratedValue Long idMatier;
+		  private Long idMatier;
 		  private Long som;
-		  private String INTITULE;
+		  private String intitule;
 		  
 	
 		  
@@ -32,17 +32,17 @@ public class MATIER {
 		    if (!(o instanceof MATIER))
 		      return false;
 		    MATIER matier = (MATIER) o;
-		    return Objects.equals(this.ID_mod, matier.ID_mod) && Objects.equals(this.INTITULE, matier.INTITULE) ; 
+		    return Objects.equals(this.idMatier, matier.idMatier) && Objects.equals(this.intitule, matier.intitule) ; 
 		      
 		  }
 
 		  @Override
 		  public int hashCode() {
-		    return Objects.hash(this.id_matier, this.ID_mod, this.INTITULE,this.som);
+		    return Objects.hash(this.idMatier, this.idMatier, this.intitule,this.som);
 		  }
 
 		  @Override
 		  public String toString() {
-		    return "matier{" + "id=" + this.id_matier + ", name='" + this.INTITULE +" " +" ensieg: " +this.som +" a module "+this.ID_mod+ '\'' + '}';
+		    return "matier{" + "id=" + this.idMatier + ", name='" + this.intitule +" " +" ensieg: " +this.som +" a module "+this.idMatier+ '\'' + '}';
 		  }
 }
