@@ -7,25 +7,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class NIVEAU {
 	private @Id @GeneratedValue Long id_niveau;
 	private long id_filiere;
 	
-	//construct
-	NIVEAU(){}
-	NIVEAU(Long id_fil){this.id_filiere=id_fil;}
-	
-	
-	 //getters and setters
-	public long getId_filiere() {
-		return id_filiere;
-	}
-	public void setId_filiere(long id_filiere) {
-		this.id_filiere = id_filiere;
-	}
-	public Long getId_niveau() {
-		return id_niveau;
-	}
 	
 	 @Override
 	  public boolean equals(Object o) {
