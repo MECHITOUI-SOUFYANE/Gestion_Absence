@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
 
 public class SEANCE {
 	//i think id de matier est auto increment
@@ -16,48 +18,7 @@ public class SEANCE {
 			  private String HEURE_FIN;
 			  private String nature;
 			  
-			  //constructeur
-			  SEANCE(){}
-			  SEANCE(Long id_mat,Long id_salle,String h_debut,String h_fin,String nature){
-				  this.ID_mat=id_mat;this.ID_salle=id_salle;this.HEURE_DEBUT= h_debut;this.HEURE_FIN=h_fin;this.nature=nature;
-			  }
-			  
-			  
-			//getters and setters
-			public Long getID_mat() {
-				return ID_mat;
-			}
-			public void setID_mat(Long iD_mat) {
-				ID_mat = iD_mat;
-			}
-			public Long getID_salle() {
-				return ID_salle;
-			}
-			public void setID_salle(Long iD_salle) {
-				ID_salle = iD_salle;
-			}
-			public String getHEURE_DEBUT() {
-				return HEURE_DEBUT;
-			}
-			public void setHEURE_DEBUT(String hEURE_DEBUT) {
-				HEURE_DEBUT = hEURE_DEBUT;
-			}
-			public String getHEURE_FIN() {
-				return HEURE_FIN;
-			}
-			public void setHEURE_FIN(String hEURE_FIN) {
-				HEURE_FIN = hEURE_FIN;
-			}
-			public String getNature() {
-				return nature;
-			}
-			public void setNature(String nature) {
-				this.nature = nature;
-			}
-			public Long getId_seance() {
-				return id_seance;
-			}
-			
+			 
 			@Override
 			  public boolean equals(Object o) {
 
