@@ -5,7 +5,10 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+import lombok.AccessLevel;
+import lombok.Setter;
+import lombok.Data;
+import lombok.ToString
 @Entity
 @Data
 @NoArgsConstructor
