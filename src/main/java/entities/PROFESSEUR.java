@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
 
 
 public class PROFESSEUR {
@@ -16,43 +18,7 @@ public class PROFESSEUR {
 	  private String nom;
 	  private String prenom;
 	  private String password;
-	  //constructeur
-	  PROFESSEUR(){}
-	  PROFESSEUR(String nom,String prenom,Long id_dep,String password){
-		  this.nom=nom;this.prenom=prenom;this.ID_DEP=id_dep;this.password=password;
-	  }
-	  
-	  //getters and setters
-	public Long getID_DEP() {
-		return ID_DEP;
-	}
-	public void setID_DEP(Long iD_DEP) {
-		ID_DEP = iD_DEP;
-	}
-	public String getNom() {
-		return nom;
-	}
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-	public String getPrenom() {
-		return prenom;
-	}
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public Long getSOM() {
-		return SOM;
-	}
-	 public void setSOM(Long sOM) {
-		SOM = sOM;
-	}
+	 
 	 
 	@Override
 	  public boolean equals(Object o) {
