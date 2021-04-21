@@ -7,34 +7,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-
+@Data
+@NoArgsConstructor
 
 public class SALLE {
 	private @Id @GeneratedValue Long id_salle;
 	  private String Bloc;
 	  private String nom_salle;
 	  
-	//construct
-	  SALLE(){}
-	  SALLE(String nom,String bloc){this.Bloc=bloc;this.nom_salle=nom;}
-	  
-	  
-	  //getters and setters
-	public String getBloc() {
-		return Bloc;
-	}
-	public void setBloc(String bloc) {
-		Bloc = bloc;
-	}
-	public String getNom_salle() {
-		return nom_salle;
-	}
-	public void setNom_salle(String nom_salle) {
-		this.nom_salle = nom_salle;
-	}
-	public Long getId_salle() {
-		return id_salle;
-	}
 	
 	@Override
 	  public boolean equals(Object o) {
