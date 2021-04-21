@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class MODULE {
 //i think id de module est auto increment
 	private @Id @GeneratedValue Long id_module;
@@ -14,41 +16,6 @@ public class MODULE {
 	  private Long som;
 	  private Long id_niveau;
 	  private String nom_mod;
-	  
-	  //constructeur
-	  MODULE(){}
-	  MODULE(String nom,Long id_dep,Long som,Long niveau){
-		  this.nom_mod=nom;this.ID_dep=id_dep;this.id_niveau=niveau;this.som=som;
-	  }
-	  
-	  //getters and setters
-	public Long getID_dep() {
-		return ID_dep;
-	}
-	public void setID_dep(Long iD_dep) {
-		ID_dep = iD_dep;
-	}
-	public Long getSom() {
-		return som;
-	}
-	public void setSom(Long som) {
-		this.som = som;
-	}
-	public Long getId_niveau() {
-		return id_niveau;
-	}
-	public void setId_niveau(Long id_niveau) {
-		this.id_niveau = id_niveau;
-	}
-	public String getNom_mod() {
-		return nom_mod;
-	}
-	public void setNom_mod(String nom_mod) {
-		this.nom_mod = nom_mod;
-	}
-	public Long getId_module() {
-		return id_module;
-	}
 	  
 	  
 	
