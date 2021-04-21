@@ -7,7 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-
+@Data
+@NoArgsConstructor
 
 public class ABSENCE {
 	//i think l absence a un id
@@ -17,39 +18,7 @@ public class ABSENCE {
 	  private int semain;
 	  private  boolean JUSTIFIE;
 	  
-	  ABSENCE(){}
-	  ABSENCE(Long apogee,Long seance,int semain,boolean jus){
-		  this.apogee=apogee;this.ID_seance=seance;this.semain=semain;this.JUSTIFIE=jus;
-	  }
-	  
-	  //getters and setters
-	public Long getApogee() {
-		return apogee;
-	}
-	public void setApogee(Long apogee) {
-		this.apogee = apogee;
-	}
-	public Long getID_seance() {
-		return ID_seance;
-	}
-	public void setID_seance(Long iD_seance) {
-		ID_seance = iD_seance;
-	}
-	public int getSemain() {
-		return semain;
-	}
-	public void setSemain(int semain) {
-		this.semain = semain;
-	}
-	public boolean isJUSTIFIE() {
-		return JUSTIFIE;
-	}
-	public void setJUSTIFIE(boolean jUSTIFIE) {
-		JUSTIFIE = jUSTIFIE;
-	}
-	public Long getId_abs() {
-		return id_abs;
-	}
+	 
 	
 	  @Override
 	  
