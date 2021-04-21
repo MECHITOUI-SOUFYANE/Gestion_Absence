@@ -7,36 +7,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
 
 public class DEPARTEMENT {
 	  private @Id @GeneratedValue Long ID_DEP;
 	  private Long ID_CHEF_DEP;
 	  private String nom_dep;
 	  
-	  //constructure
-	  
-	  DEPARTEMENT(){}
-	  DEPARTEMENT(String nom,Long id){
-		  this.nom_dep=nom;this.ID_CHEF_DEP=id;
-	  }
-	  
-	  
-	  //getters and setters
-	public Long getID_CHEF_DEP() {
-		return ID_CHEF_DEP;
-	}
-	public void setID_CHEF_DEP(Long iD_CHEF_DEP) {
-		ID_CHEF_DEP = iD_CHEF_DEP;
-	}
-	public String getNom_dep() {
-		return nom_dep;
-	}
-	public void setNom_dep(String nom_dep) {
-		this.nom_dep = nom_dep;
-	}
-	public Long getID_DEP() {
-		return ID_DEP;
-	}
+	
 	  
 	  @Override
 	  public boolean equals(Object o) {
