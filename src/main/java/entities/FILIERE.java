@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Data
+@NoArgsConstructor
 
 public class FILIERE {
 	
@@ -14,29 +16,7 @@ public class FILIERE {
 	  private Long ID_CHEF_fil;
 	  private String nom_fil;
 	  
-//constructure
-	  
-	  FILIERE(){}
-	  FILIERE(String nom,Long id){
-		  this.nom_fil=nom;this.ID_CHEF_fil=id;
-	  }
-	  
-	  //getters and setters
-	public Long getID_CHEF_fil() {
-		return ID_CHEF_fil;
-	}
-	public void setID_CHEF_fil(Long iD_CHEF_fil) {
-		ID_CHEF_fil = iD_CHEF_fil;
-	}
-	public String getNom_fil() {
-		return nom_fil;
-	}
-	public void setNom_fil(String nom_fil) {
-		this.nom_fil = nom_fil;
-	}
-	public Long getID_filier() {
-		return ID_filier;
-	}
+
 	  
 	  @Override
 	  public boolean equals(Object o) {
