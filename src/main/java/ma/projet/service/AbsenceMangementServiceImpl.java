@@ -109,6 +109,8 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 			absences.add(absence);
 		}
 		
+		absenceRepository.saveAll(absences);
+		
 	
 	}
 	
