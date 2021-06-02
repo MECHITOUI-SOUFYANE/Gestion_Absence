@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ma.projet.entities.Seance;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class SeanceDetailsResponse {
 	
@@ -14,7 +15,7 @@ public class SeanceDetailsResponse {
 	private String professeurName;
 	private String moduleName;
 	private Date jour;
-	private Long idSeance;
+	private Seance seance;
 	private String notFoundMessage;
 	
 

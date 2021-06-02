@@ -2,6 +2,7 @@ package ma.projet.repositorie;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +20,7 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
 			+ "id = ?1 and nombre_semaines >= 1", nativeQuery = true)
 	void decrementDateAndSemaineNumberByIdSeance(Long idSeance);
 	
-	@Query(value = "select seance.id from seance left join matiere on seance.matiere_id=matiere.id WHERE (seance.heure_debut <=  ?1 AND ?1 <= seance.heure_fin AND seance.date = ?2) "
+	@Query(value = "select * from seance left join matiere on seance.matiere_id=matiere.id WHERE (seance.heure_debut <=  ?1 AND ?1 <= seance.heure_fin AND seance.date = ?2) "
 + "			   AND matiere.professeur_id = ?3" ,nativeQuery = true)
-	Long findIdSeance(Date currentHeure, Date date, Long idProf);
+	Optional<Seance> findIdSeance(Date currentHeure, Date date, Long idProf);
 }

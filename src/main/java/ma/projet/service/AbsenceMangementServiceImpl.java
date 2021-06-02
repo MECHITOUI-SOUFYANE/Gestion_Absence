@@ -5,12 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.IsoFields;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +17,6 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ma.projet.dto.EtudiantDto;
@@ -62,8 +57,6 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 	@Autowired
 	AppUserRepository appUserRepository;
 	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
 	
 	
 	
@@ -124,7 +117,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		Date currentHeure = new SimpleDateFormat("HH:mm:ss").parse(LocalTime.now().format(DateTimeFormatter.ISO_TIME));
 		Date currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
 		
-		Long idSeance = seanceRepository.findIdSeance(currentHeure, currentDate, appUser.get().getId());
+		Optional<Seance> seance = seanceRepository.findIdSeance(currentHeure, currentDate, appUser.get().getId());
 		
 		//module
 		Long idModule = matiereRepository.findIdModuleByProfesseurAndSeance( currentHeure, currentDate, professeur.get().getId());
@@ -146,7 +139,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 			seanceDetailsResponse.setEtudiantResponses(etudiantResponses);
 			seanceDetailsResponse.setJour(currentDate);
 			seanceDetailsResponse.setModuleName(opModule.get().getNom());
-			seanceDetailsResponse.setIdSeance(idSeance);
+			seanceDetailsResponse.setSeance(seance.get());
 			seanceDetailsResponse.setProfesseurName(professeur.get().getNom());
 		
 		}else {

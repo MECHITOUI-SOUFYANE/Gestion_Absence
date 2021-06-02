@@ -9,6 +9,7 @@ import ma.projet.entities.AppUser;
 
 public class UserSecurity implements UserDetails{
 
+	private static final long serialVersionUID = 6415613387010922319L;
 	AppUser user;
 	
 	public UserSecurity(AppUser user) {

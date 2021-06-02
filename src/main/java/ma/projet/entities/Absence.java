@@ -1,7 +1,6 @@
 package ma.projet.entities;
 
 import java.io.Serializable;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import javax.persistence.Entity;

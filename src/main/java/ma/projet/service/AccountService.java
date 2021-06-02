@@ -2,10 +2,8 @@ package ma.projet.service;
 
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-
-import ma.projet.entities.AppUser;
 import ma.projet.entities.AppRole;
+import ma.projet.entities.AppUser;
 
 
 public interface AccountService {

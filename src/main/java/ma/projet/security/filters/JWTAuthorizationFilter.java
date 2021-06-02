@@ -3,7 +3,6 @@ package ma.projet.security.filters;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -40,6 +39,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 		System.out.println(claims);
 		String username = claims.getSubject();
 		System.out.println(username);
+		@SuppressWarnings("unchecked")
 		ArrayList<Map<String,String>> roles = (ArrayList<Map<String, String>>) claims.get("roles");
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		roles.forEach((role) -> authorities.add(new SimpleGrantedAuthority(role.get("authority"))));

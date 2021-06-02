@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import ma.projet.entities.AppUser;
 import ma.projet.repositorie.AppUserRepository;
-import ma.projet.security.model.UserSecurity;
 
 public class UserDetailServiceImpl implements UserDetailsService{
 

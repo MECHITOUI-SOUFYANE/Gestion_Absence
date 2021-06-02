@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class Seance implements Serializable {
 	private Date heureFin;
 	@Column(length = 10)
 	private String nature;
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER)
 	private Matiere matiere;
 	@OneToMany(mappedBy="seance")
 	private List<Absence> absences = new ArrayList<>();
