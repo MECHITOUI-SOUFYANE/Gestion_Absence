@@ -9,7 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -148,6 +150,17 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		
 		return seanceDetailsResponse;
 		
+	}
+
+
+	@Override
+	public void getAbsencesEtudiant(String username) {
+		Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+		Optional<Professeur> professeur = professeurRepository.findById(appUser.get().getId());
+
+		List<Absence> absences = professeur.get().getMatiere().getSeance().getAbsences();
+
+		Map<Absence,  Etudiant> map = new HashMap<>();
 	}
 
 	

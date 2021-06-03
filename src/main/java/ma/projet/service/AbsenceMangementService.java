@@ -12,6 +12,7 @@ public interface AbsenceMangementService {
 
 	Professeur createProfesseur(ProfesseurDto user);
 	SeanceDetailsResponse getEtudiantsByProf(String email)  throws ParseException;
+	void getAbsencesEtudiant(String username);
 	void  setAbsence(List<EtudiantRequest> etudiants , Long idSeance);
 	
 }

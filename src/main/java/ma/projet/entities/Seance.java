@@ -37,6 +37,6 @@ public class Seance implements Serializable {
 	private String nature;
 	@OneToOne(fetch = FetchType.EAGER)
 	private Matiere matiere;
-	@OneToMany(mappedBy="seance")
+	@OneToMany(mappedBy="seance" , fetch = FetchType.EAGER)
 	private List<Absence> absences = new ArrayList<>();
 }

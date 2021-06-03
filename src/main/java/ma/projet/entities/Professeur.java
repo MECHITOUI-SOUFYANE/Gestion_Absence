@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class Professeur implements Serializable {
 	private Departement departement;
 	@OneToOne(mappedBy = "professeur")
 	private Filiere filiere ;
-	@OneToOne(mappedBy="professeur")
+	@OneToOne(mappedBy="professeur" , fetch = FetchType.EAGER)
 	private Matiere matiere;
 	@OneToOne(mappedBy = "professeur")
 	private Module module;
