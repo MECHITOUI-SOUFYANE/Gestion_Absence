@@ -9,9 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -81,14 +79,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		
 		Optional<Seance> OptionalSeance =seanceRepository.findById(idSeance);
 		Seance seance = OptionalSeance.get();	
-		// Ajouter 7 jours(une semaine) dans la date de la seance prochaine
-//		Date seanceDate = seance.getDate();
-//		Calendar calendar = Calendar.getInstance();
-//		calendar.setTime(seanceDate);
-//		calendar.add(Calendar.DATE, 7);
-//		seanceDate = calendar.getTime();
-//		seanceRepository.
-		
+
 		List<Long> ids = new ArrayList<>();	
 		for (EtudiantRequest etudiant : etudiants) {
 			ids.add(etudiant.getIdEtudiant());
@@ -103,7 +94,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 			absence.setJustifie(false);	
 			absences.add(absence);
 		}
-		
+		seanceRepository.decrementDateAndSemaineNumberByIdSeance(idSeance);
 		absenceRepository.saveAll(absences);
 		
 	
@@ -160,7 +151,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 
 		List<Absence> absences = professeur.get().getMatiere().getSeance().getAbsences();
 
-		Map<Absence,  Etudiant> map = new HashMap<>();
+		System.out.println(absences);
 	}
 
 	

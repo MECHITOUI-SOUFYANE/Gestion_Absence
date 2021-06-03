@@ -33,6 +33,9 @@ public class ProfesseurController {
 	@PostMapping("/professeur/absence" )
 	public ResponseEntity<List<Absence>> absence (@RequestBody EtudiantSeanceRequest etudiantSeanceRequest) {
 		
+		System.out.println(etudiantSeanceRequest.getEtudiantRequests());
+		System.out.println( etudiantSeanceRequest.getIdSeance());
+		
 		absenceMangementService.setAbsence(etudiantSeanceRequest.getEtudiantRequests(), etudiantSeanceRequest.getIdSeance());
 		
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
