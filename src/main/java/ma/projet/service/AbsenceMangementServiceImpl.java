@@ -1,6 +1,5 @@
 package ma.projet.service;
 
-import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -11,34 +10,32 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ma.projet.dto.EtudiantDto;
 import ma.projet.dto.ProfesseurDto;
 import ma.projet.entities.Absence;
 import ma.projet.entities.AppUser;
 import ma.projet.entities.Etudiant;
+import ma.projet.entities.Matiere;
 import ma.projet.entities.Module;
 import ma.projet.entities.Professeur;
 import ma.projet.entities.Seance;
+import ma.projet.reponse.AbsenceParMatiere;
+import ma.projet.reponse.EtudiantAbsenceResponse;
 import ma.projet.reponse.EtudiantResponse;
 import ma.projet.reponse.SeanceDetailsResponse;
 import ma.projet.repositorie.AbsenceRepository;
 import ma.projet.repositorie.AppUserRepository;
 import ma.projet.repositorie.EtudiantRepository;
 import ma.projet.repositorie.MatiereRepository;
-import ma.projet.repositorie.ModuleRepository;
 import ma.projet.repositorie.ProfesseurRepository;
 import ma.projet.repositorie.SeanceRepository;
 import ma.projet.request.EtudiantRequest;
 @Service
-@Transactional
+@org.springframework.transaction.annotation.Transactional
 public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 
 
@@ -49,13 +46,11 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 	@Autowired
 	private MatiereRepository matiereRepository;
 	@Autowired
-	private ModuleRepository moduleRepository;
-	@Autowired
 	private EtudiantRepository etudiantRepository;
 	@Autowired
 	private SeanceRepository seanceRepository;
 	@Autowired
-	AppUserRepository appUserRepository;
+	private AppUserRepository appUserRepository;
 	
 	
 	
@@ -80,23 +75,26 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		Optional<Seance> OptionalSeance =seanceRepository.findById(idSeance);
 		Seance seance = OptionalSeance.get();	
 
-		List<Long> ids = new ArrayList<>();	
-		for (EtudiantRequest etudiant : etudiants) {
-			ids.add(etudiant.getIdEtudiant());
-		}
-		List<Etudiant> etudiants2 = etudiantRepository.findAllById(ids);
- 		Collection<Absence> absences = new ArrayList<Absence>();
-		for (Etudiant etudiant : etudiants2) {
-			Absence absence = new Absence();
-			absence.setEtudiant(etudiant);
-			absence.setSeance(seance);
-			absence.setDate(seance.getDate());
-			absence.setJustifie(false);	
-			absences.add(absence);
-		}
-		seanceRepository.decrementDateAndSemaineNumberByIdSeance(idSeance);
-		absenceRepository.saveAll(absences);
-		
+		if(seance.getNombreSemaines()>=1) {
+
+			List<Long> ids = new ArrayList<>();	
+			for (EtudiantRequest etudiant : etudiants) {
+				ids.add(etudiant.getIdEtudiant());
+			}
+			List<Etudiant> etudiants2 = etudiantRepository.findAllById(ids);
+	 		Collection<Absence> absences = new ArrayList<Absence>();
+			for (Etudiant etudiant : etudiants2) {
+				Absence absence = new Absence();
+				absence.setEtudiant(etudiant);
+				absence.setSeance(seance);
+				absence.setDate(seance.getDate());
+				absence.setJustifie(false);	
+				absences.add(absence);
+			}
+			seance.setNombreSemaines(seance.getNombreSemaines()-1);
+			seance.setDate(java.sql.Date.valueOf(LocalDate.now().plusWeeks(1)));
+			absenceRepository.saveAll(absences);
+		}	
 	
 	}
 	
@@ -110,30 +108,44 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		Date currentHeure = new SimpleDateFormat("HH:mm:ss").parse(LocalTime.now().format(DateTimeFormatter.ISO_TIME));
 		Date currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
 		
-		Optional<Seance> seance = seanceRepository.findIdSeance(currentHeure, currentDate, appUser.get().getId());
+
+		List<Matiere> matieres = matiereRepository.findByProfesseur(professeur.get());
+		Seance seance  = new Seance();
+		Matiere imatiere = new Matiere();
+		for (Matiere matiere : matieres) {
+			seance = matiere.getSeance().stream().filter(s -> s.getDate().equals(currentDate)
+					&&s.getHeureDebut().before(currentHeure)&&
+					s.getHeureFin().after(currentHeure)&&s.getNombreSemaines()>0).findFirst().orElse(null);
+			if(seance!=null) {
+				imatiere = matiere;
+				break;
+			}
+		}
 		
-		//module
-		Long idModule = matiereRepository.findIdModuleByProfesseurAndSeance( currentHeure, currentDate, professeur.get().getId());
+	
 		SeanceDetailsResponse seanceDetailsResponse = new SeanceDetailsResponse();
-		if(idModule!=null) {
-			Optional<Module> opModule = moduleRepository.findById(idModule);
-			System.out.println(opModule.get().getNom());
-			//etudiants	
-			List<Etudiant> etudiants = etudiantRepository.findByIdModule(idModule);
-			/*List<Etudiant> to List<EtudiantDto>*/
-			Type listType = new TypeToken<List<EtudiantDto>>() {
-			}.getType();	
-			List<EtudiantDto> etudiantDtos = new ModelMapper().map(etudiants, listType);
-			/*List<EtudiantDto> to List<EtudiantResponse>*/
-			Type listType2 = new TypeToken<List<EtudiantResponse>>() {
-			}.getType();	
-			List<EtudiantResponse> etudiantResponses = new ModelMapper().map(etudiantDtos, listType2);
+		if(seance!=null) {
+			System.out.println("inside");
+			Module module = imatiere.getModule();
+			List<Etudiant>etudiants = module.getEtudiants();	
+			List<EtudiantResponse> etudiantResponses = new ArrayList<>();
+			etudiants
+				.forEach(etudiant->{
+				    EtudiantResponse etudiantResponse = new EtudiantResponse(); 
+				    etudiantResponse.setCne(etudiant.getCne());
+				    etudiantResponse.setId(etudiant.getId());
+				    etudiantResponse.setNom(etudiant.getNom());
+				    etudiantResponse.setPrenom(etudiant.getPrenom());
+				    etudiantResponse.setNumeroApogee(etudiant.getNumeroApogee());
+				    etudiantResponses.add(etudiantResponse);});
+			
 			
 			seanceDetailsResponse.setEtudiantResponses(etudiantResponses);
 			seanceDetailsResponse.setJour(currentDate);
-			seanceDetailsResponse.setModuleName(opModule.get().getNom());
-			seanceDetailsResponse.setSeance(seance.get());
+			seanceDetailsResponse.setModuleName(module.getNom());
+			seanceDetailsResponse.setSeance(seance);
 			seanceDetailsResponse.setProfesseurName(professeur.get().getNom());
+			seanceDetailsResponse.setNotFoundMessage("");
 		
 		}else {
 			seanceDetailsResponse.setNotFoundMessage("vous n/'avez pas une seance actuellement ");
@@ -145,14 +157,86 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 
 
 	@Override
-	public void getAbsencesEtudiant(String username) {
+	public List<AbsenceParMatiere> getAbsencesEtudiant(String username) {
 		Optional<AppUser> appUser = appUserRepository.findByUsername(username);
 		Optional<Professeur> professeur = professeurRepository.findById(appUser.get().getId());
-
-		List<Absence> absences = professeur.get().getMatiere().getSeance().getAbsences();
-
-		System.out.println(absences);
+		List<Matiere> matieres = matiereRepository.findByProfesseur(professeur.get());
+		List<AbsenceParMatiere> absenceParMatiere = new ArrayList<>();
+		matieres.stream().forEach(matiere->{
+			List<EtudiantAbsenceResponse> etudiantAbsenceResponses = new ArrayList<>();
+			matiere.getModule()
+					.getEtudiants()
+						.stream()
+							.filter(etudiants->etudiants.getAbsences().size()>0)
+							.forEach(etudiant->{
+								 int nbr = etudiant.getAbsences().stream().filter(absence -> absence.getSeance().getMatiere().equals(matiere)).collect(Collectors.toList()).size();
+								 if(nbr>0) {
+								 EtudiantAbsenceResponse etudiantResponse = new EtudiantAbsenceResponse(); 
+								 etudiantResponse.setCne(etudiant.getCne());   
+								 etudiantResponse.setNom(etudiant.getNom());
+								 etudiantResponse.setPrenom(etudiant.getPrenom());
+								 etudiantResponse.setNombreAbsence((long)nbr);
+								 etudiantAbsenceResponses.add(etudiantResponse);
+								 }
+							});
+			
+			absenceParMatiere.add(new AbsenceParMatiere(matiere.getIntitule(), etudiantAbsenceResponses));
+		});
+		
+		System.out.println("fin");
+		
+		return absenceParMatiere;
 	}
+	@Override
+	public AbsenceParMatiere getEtudiant(String username) throws ParseException {
+		Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+		Optional<Professeur> professeur = professeurRepository.findById(appUser.get().getId());
+		List<Matiere> matieres = matiereRepository.findByProfesseur(professeur.get());
+		Date currentHeure = new SimpleDateFormat("HH:mm:ss").parse(LocalTime.now().format(DateTimeFormatter.ISO_TIME));
+		Date currentDate = new SimpleDateFormat("yyyy-MM-dd").parse(LocalDate.now().format(DateTimeFormatter.ISO_DATE));
+		AbsenceParMatiere absenceParMatiere = new AbsenceParMatiere();
+		List<EtudiantAbsenceResponse> list = new ArrayList<>();
+
+		
+		Seance seance  = new Seance();
+		Matiere imatiere = new Matiere();
+		for (Matiere matiere : matieres) {
+			seance = matiere.getSeance().stream().filter(s -> s.getDate().equals(currentDate)
+					&&s.getHeureDebut().before(currentHeure)&&
+					s.getHeureFin().after(currentHeure)).findFirst().orElse(null);
+			if(seance!=null) {
+				imatiere = matiere;
+				break;
+			}
+		}
+		if(seance!=null) {
+			final Seance s= seance;
+			Module module = imatiere.getModule();
+			List<Etudiant>etudiants = module.getEtudiants();
+			etudiants
+				.stream()
+					.filter(etudiant -> etudiant.getAbsences()
+										.stream()
+										.anyMatch(absence->absence.getSeance().equals(s)))
+					.forEach(etudiant->{
+				    EtudiantAbsenceResponse etudiantResponse = new EtudiantAbsenceResponse(); 
+				    etudiantResponse.setCne(etudiant.getCne());
+				    
+				    etudiantResponse.setNom(etudiant.getNom());
+				    etudiantResponse.setPrenom(etudiant.getPrenom());
+				    etudiantResponse.setNombreAbsence( etudiant.getAbsences().stream().filter(absence->absence.getSeance().equals(s)).count());
+				    list.add(etudiantResponse);
+				    });
+			
+			absenceParMatiere.setEtudiantAbsenceResponses(list);
+			absenceParMatiere.setMatiere(imatiere.getIntitule());
+			
+		}
+		System.out.println(list);
+		return absenceParMatiere;
+		
+	}
+
 
 	
 }

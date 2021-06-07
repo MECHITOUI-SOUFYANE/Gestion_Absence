@@ -16,6 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,8 +37,10 @@ public class Seance implements Serializable {
 	private Date heureFin;
 	@Column(length = 10)
 	private String nature;
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne
+	@JsonIgnore
 	private Matiere matiere;
-	@OneToMany(mappedBy="seance" , fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="seance",fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Absence> absences = new ArrayList<>();
 }

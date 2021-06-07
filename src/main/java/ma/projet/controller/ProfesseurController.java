@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ma.projet.dto.ProfesseurDto;
 import ma.projet.entities.Absence;
+import ma.projet.reponse.AbsenceParMatiere;
 import ma.projet.reponse.ProfesseurResponse;
 import ma.projet.reponse.SeanceDetailsResponse;
 import ma.projet.request.EtudiantSeanceRequest;
@@ -49,9 +53,26 @@ public class ProfesseurController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@GetMapping(path="/professeur/etudiants")
-	public ResponseEntity<SeanceDetailsResponse> getEtudiants(Principal principal) throws ParseException {
+	@GetMapping(path="/professeur/etudiants",produces =  {MediaType.APPLICATION_JSON_VALUE},
+		     consumes =  {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<SeanceDetailsResponse> getEtudiants(Principal principal) throws ParseException, JsonProcessingException {
 		SeanceDetailsResponse seanceDetailsResponse = absenceMangementService.getEtudiantsByProf(principal.getName());
+		System.out.println(new ObjectMapper().writeValueAsString(seanceDetailsResponse));
 		return new ResponseEntity<>(seanceDetailsResponse,HttpStatus.ACCEPTED);
+	}
+	@GetMapping(path="/professeur/absences/matieres",produces =  {MediaType.APPLICATION_JSON_VALUE},
+		     consumes =  {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<AbsenceParMatiere>> getEtudiantsAbsencesByMatiere(Principal principal){
+		
+		return new ResponseEntity<List<AbsenceParMatiere>>(absenceMangementService.getAbsencesEtudiant(principal.getName()), HttpStatus.OK)	;
+		
+	}
+	
+	@GetMapping(path="/professeur/absences/seance/etudiants",produces =  {MediaType.APPLICATION_JSON_VALUE},
+		     consumes =  {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<AbsenceParMatiere> getEtudiantsByMatiere(Principal principal) throws ParseException{
+		
+		return new ResponseEntity<AbsenceParMatiere>(absenceMangementService.getEtudiant(principal.getName()),HttpStatus.OK) ;
+		
 	}
 }

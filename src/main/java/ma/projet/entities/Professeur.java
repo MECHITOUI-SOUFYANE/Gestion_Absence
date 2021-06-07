@@ -1,15 +1,18 @@
 package ma.projet.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,19 +31,19 @@ public class Professeur implements Serializable {
 	private String nom;
 	@Column(length = 40)
 	private String prenom;
-//	@Column(length = 80)
-//	private String username;
-//	private String password;
 	private boolean chefDeFiliere=false;
 	@ManyToOne
+	@JsonIgnore
 	private Departement departement;
 	@OneToOne(mappedBy = "professeur")
+	@JsonIgnore
 	private Filiere filiere ;
-	@OneToOne(mappedBy="professeur" , fetch = FetchType.EAGER)
-	private Matiere matiere;
+	@OneToMany(mappedBy="professeur")
+	@JsonIgnore
+	private java.util.List<Matiere> matiere = new ArrayList<>();
 	@OneToOne(mappedBy = "professeur")
-	private Module module;
-	
+	@JsonIgnore
+	private Module module;	
 	public String toString() {
 		return "id : "+id+"  nom : "+nom;
 	}

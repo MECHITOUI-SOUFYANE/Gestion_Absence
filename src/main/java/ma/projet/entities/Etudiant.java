@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,8 +33,10 @@ public class Etudiant implements Serializable {
 	@Column(length = 30)
 	private String prenom;
 	@ManyToMany(mappedBy = "etudiants")
+	@JsonIgnore
 	private List<Module> modules = new ArrayList<>();
 	@OneToMany(mappedBy="etudiant")
+	@JsonIgnore
 	private List<Absence> absences = new ArrayList<>();
 
 }
