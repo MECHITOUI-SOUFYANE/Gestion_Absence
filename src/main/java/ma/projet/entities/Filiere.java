@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +28,9 @@ public class Filiere implements Serializable {
 	@Column(length = 80)
 	private String nom;
 	@OneToOne
+	@JsonIgnore
 	private Professeur professeur; //chef de filiere
 	@ManyToMany
+	@JsonIgnore
 	private List<Niveau> niveaus = new ArrayList<>() ;
 }

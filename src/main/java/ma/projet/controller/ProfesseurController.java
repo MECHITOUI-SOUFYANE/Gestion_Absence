@@ -23,6 +23,7 @@ import ma.projet.entities.Absence;
 import ma.projet.reponse.AbsenceParMatiere;
 import ma.projet.reponse.ProfesseurResponse;
 import ma.projet.reponse.SeanceDetailsResponse;
+import ma.projet.request.EtudiantMatiereRequest;
 import ma.projet.request.EtudiantSeanceRequest;
 import ma.projet.request.ProfesseurRequest;
 import ma.projet.service.AbsenceMangementService;
@@ -30,49 +31,60 @@ import ma.projet.service.AbsenceMangementService;
 @RestController
 @CrossOrigin(origins = "*")
 public class ProfesseurController {
-	
+
 	@Autowired
 	private AbsenceMangementService absenceMangementService;
-	
-	@PostMapping("/professeur/absence" )
-	public ResponseEntity<List<Absence>> absence (@RequestBody EtudiantSeanceRequest etudiantSeanceRequest) {
-		
+
+	@PostMapping("/professeur/absence")
+	public ResponseEntity<List<Absence>> absence(@RequestBody EtudiantSeanceRequest etudiantSeanceRequest) {
+
 		System.out.println(etudiantSeanceRequest.getEtudiantRequests());
-		System.out.println( etudiantSeanceRequest.getIdSeance());
-		
-		absenceMangementService.setAbsence(etudiantSeanceRequest.getEtudiantRequests(), etudiantSeanceRequest.getIdSeance());
-		
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
-	
+		System.out.println(etudiantSeanceRequest.getIdSeance());
+
+		absenceMangementService.setAbsence(etudiantSeanceRequest.getEtudiantRequests(),
+				etudiantSeanceRequest.getIdSeance());
+
+		return new ResponseEntity<>(HttpStatus.OK);
+
 	}
-	@PostMapping(path = "/admin/create" , produces =  {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE},
-		     consumes =  {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<ProfesseurResponse> createProfesseur(@RequestBody ProfesseurRequest professeurRequest){
+
+	@PostMapping(path = "/admin/create", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_XML_VALUE,
+					MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ProfesseurResponse> createProfesseur(@RequestBody ProfesseurRequest professeurRequest) {
 		ProfesseurDto professeurDto = new ModelMapper().map(professeurRequest, ProfesseurDto.class);
-	    absenceMangementService.createProfesseur(professeurDto);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		absenceMangementService.createProfesseur(professeurDto);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	@GetMapping(path="/professeur/etudiants",produces =  {MediaType.APPLICATION_JSON_VALUE},
-		     consumes =  {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<SeanceDetailsResponse> getEtudiants(Principal principal) throws ParseException, JsonProcessingException {
+
+	@GetMapping(path = "/professeur/etudiants", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<SeanceDetailsResponse> getEtudiants(Principal principal)
+			throws ParseException, JsonProcessingException {
 		SeanceDetailsResponse seanceDetailsResponse = absenceMangementService.getEtudiantsByProf(principal.getName());
 		System.out.println(new ObjectMapper().writeValueAsString(seanceDetailsResponse));
-		return new ResponseEntity<>(seanceDetailsResponse,HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(seanceDetailsResponse, HttpStatus.OK);
 	}
-	@GetMapping(path="/professeur/absences/matieres",produces =  {MediaType.APPLICATION_JSON_VALUE},
-		     consumes =  {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<List<AbsenceParMatiere>> getEtudiantsAbsencesByMatiere(Principal principal){
-		
-		return new ResponseEntity<List<AbsenceParMatiere>>(absenceMangementService.getAbsencesEtudiant(principal.getName()), HttpStatus.OK)	;
-		
+
+	@GetMapping(path = "/professeur/matieres/absences", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = {
+			MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<List<AbsenceParMatiere>> getEtudiantsAbsencesByMatiere(Principal principal) {
+
+		return new ResponseEntity<List<AbsenceParMatiere>>(
+				absenceMangementService.getAbsencesEtudiant(principal.getName()), HttpStatus.OK);
+
 	}
-	
-	@GetMapping(path="/professeur/absences/seance/etudiants",produces =  {MediaType.APPLICATION_JSON_VALUE},
+
+	@GetMapping(path="/professeur/etudiants/absences",produces =  {MediaType.APPLICATION_JSON_VALUE},
 		     consumes =  {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<AbsenceParMatiere> getEtudiantsByMatiere(Principal principal) throws ParseException{
 		
 		return new ResponseEntity<AbsenceParMatiere>(absenceMangementService.getEtudiant(principal.getName()),HttpStatus.OK) ;
 		
 	}
+	@PostMapping(path="/matiere/etudiant/absence/detaills")
+	public ResponseEntity<List<Absence>> getAbsenceAndSeanceOfEtudiant(@RequestBody	EtudiantMatiereRequest etudiantMatiereRequest){
+		return new ResponseEntity<List<Absence>>(absenceMangementService.getAbsencesInSeanceOfEtudiant(etudiantMatiereRequest),HttpStatus.OK);
+		
+	}
+	
 }

@@ -24,7 +24,7 @@ public class Absence implements Serializable {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Temporal(TemporalType.DATE)
-	Date date;
+	private Date date;
 	private boolean justifie;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Etudiant etudiant;

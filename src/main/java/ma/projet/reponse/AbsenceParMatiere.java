@@ -13,6 +13,7 @@ public class AbsenceParMatiere implements Serializable {
 	private static final long serialVersionUID = 8362983736904645964L;
 	
 	private String matiere;
+	private Long idMatiere;
 	private List<EtudiantAbsenceResponse> etudiantAbsenceResponses = new ArrayList<>();
 	
 

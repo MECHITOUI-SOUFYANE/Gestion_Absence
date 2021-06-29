@@ -13,7 +13,7 @@ import ma.projet.entities.Seance;
 public class SeanceDetailsResponse implements Serializable {
 	private static final long serialVersionUID = 2754966290518962824L;	
 	private String professeurName;
-	private String moduleName;
+	private String matiereName;
 	private Date jour;
 	private Seance seance;
 	private List<EtudiantResponse> etudiantResponses = new ArrayList<>();

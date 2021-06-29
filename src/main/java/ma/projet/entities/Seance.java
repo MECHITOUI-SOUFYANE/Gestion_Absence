@@ -30,7 +30,6 @@ public class Seance implements Serializable {
 	private Long id;
 	@Temporal(TemporalType.DATE)
 	private Date date;
-	private int nombreSemaines;
 	@Temporal(TemporalType.TIME)
 	private Date heureDebut;
 	@Temporal(TemporalType.TIME)
@@ -43,4 +42,10 @@ public class Seance implements Serializable {
 	@OneToMany(mappedBy="seance",fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Absence> absences = new ArrayList<>();
+	@OneToOne(mappedBy = "seance",fetch = FetchType.EAGER)
+	private Salle salle;
+	@OneToOne
+	private Niveau niveau ;
+	@OneToOne
+	private Filiere filiere;
 }
