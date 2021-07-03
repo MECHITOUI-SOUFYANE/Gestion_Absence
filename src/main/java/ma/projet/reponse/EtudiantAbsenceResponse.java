@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class EtudiantAbsenceResponse implements Serializable {
 
 	private static final long serialVersionUID = -3185953771715311186L;
-	
+	private long id;
 	private String nom ;
 	private String prenom;
 	private String cne;

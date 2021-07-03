@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import ma.projet.reponse.AbsenceParMatiere;
 import ma.projet.reponse.EtudiantAbsenceResponse;
 import ma.projet.reponse.EtudiantResponse;
 import ma.projet.reponse.SeanceDetailsResponse;
+import ma.projet.reponse.SeanceProchaine;
 import ma.projet.repositorie.AbsenceRepository;
 import ma.projet.repositorie.AppUserRepository;
 import ma.projet.repositorie.EtudiantRepository;
@@ -145,12 +147,41 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 			seanceDetailsResponse.setMatiereName(imatiere.getIntitule());
 			seanceDetailsResponse.setSeance(seance);
 			seanceDetailsResponse.setProfesseurName(professeur.get().getNom());
-			seanceDetailsResponse.setNotFoundMessage("");
+			seanceDetailsResponse.setSeanceProchaine(null);
 		
 		}else {
+			seance = new Seance();
+			 List<Date> dates = new ArrayList<>();
+			for (Matiere matiere : matieres) {
+				for (Seance s : matiere.getSeance()) {
+					dates.add(s.getDate());
+				}
+			}
+			dates = dates.stream().distinct().collect(Collectors.toList());
+			Date mindate =new SimpleDateFormat("yyyy-MM-dd").parse(Collections.min(dates).toString());
 			
-			seanceDetailsResponse.setNotFoundMessage("vous n/'avez pas une seance actuellement ");
-	}
+			List<Seance> seances = new ArrayList<>();
+			for (Matiere matiere : matieres) {
+				seances.addAll( matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)).collect(Collectors.toList()));
+			}
+			dates.clear();
+			for (Seance seance2 : seances) {
+				dates.add(seance2.getHeureDebut());
+			}
+			Date minheure = new SimpleDateFormat("HH:mm:ss").parse(Collections.min(dates).toString());
+			
+			for (Matiere matiere : matieres) {
+				seance = matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)
+						&&s.getHeureDebut().equals(minheure)).findFirst().orElse(null);
+				if(seance!=null)break;
+			}
+			SeanceProchaine sp = new SeanceProchaine(seance.getDate(),
+													seance.getHeureDebut(),
+													seance.getSalle().getBloc()+"-"+seance.getSalle().getNomSalle() ,
+													seance.getFiliere().getNom()+" "+seance.getNiveau().getNomDeNiveau(),
+													seance.getMatiere().getModule().getNom()+" : "+seance.getMatiere().getIntitule()+" - "+seance.getNature());
+			seanceDetailsResponse.setSeanceProchaine(sp);
+			}
 		
 		return seanceDetailsResponse;
 		
@@ -211,7 +242,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 			}
 		}
 		if(seance!=null) {
-			final Seance s= seance;
+			final Matiere m = imatiere;
 			Module module = imatiere.getModule();
 			List<Etudiant>etudiants = module.getEtudiants();
 			etudiants
@@ -219,11 +250,11 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 					.forEach(etudiant->{
 				    EtudiantAbsenceResponse etudiantResponse = new EtudiantAbsenceResponse(); 
 				    etudiantResponse.setCne(etudiant.getCne());
-				    
+				    etudiantResponse.setId(etudiant.getId());
 				    etudiantResponse.setNom(etudiant.getNom());
 				    etudiantResponse.setPrenom(etudiant.getPrenom());
 				    etudiantResponse.setNombreAbsence( etudiant.getAbsences().stream()
-							.filter(absence->absence.getSeance().equals(s)).count());
+							.filter(absence->absence.getSeance().getMatiere().equals(m)).count());
 				    list.add(etudiantResponse);
 				    });
 			

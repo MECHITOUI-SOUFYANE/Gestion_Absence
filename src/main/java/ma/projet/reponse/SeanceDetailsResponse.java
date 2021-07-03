@@ -17,6 +17,6 @@ public class SeanceDetailsResponse implements Serializable {
 	private Date jour;
 	private Seance seance;
 	private List<EtudiantResponse> etudiantResponses = new ArrayList<>();
-	private String notFoundMessage;
+	private SeanceProchaine seanceProchaine;
 
 }
