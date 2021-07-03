@@ -207,6 +207,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 								 etudiantResponse.setId(etudiant.getId());
 								 etudiantResponse.setNom(etudiant.getNom());
 								 etudiantResponse.setPrenom(etudiant.getPrenom());
+								 etudiantResponse.setNumeroApogee(etudiant.getNumeroApogee());
 								 etudiantResponse.setNombreAbsence((long)nbr);
 								 etudiantAbsenceResponses.add(etudiantResponse);
 								 }

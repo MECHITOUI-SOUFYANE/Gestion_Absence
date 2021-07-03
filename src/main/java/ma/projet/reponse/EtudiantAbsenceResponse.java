@@ -14,5 +14,6 @@ public class EtudiantAbsenceResponse implements Serializable {
 	private String prenom;
 	private String cne;
 	private Long nombreAbsence;
+	private Long numeroApogee;
 
 }
