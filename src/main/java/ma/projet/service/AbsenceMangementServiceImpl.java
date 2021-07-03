@@ -78,7 +78,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		Optional<Seance> OptionalSeance =seanceRepository.findById(idSeance);
 		Seance seance = OptionalSeance.get();	
 
-		 {
+		 
 
 			List<Long> ids = new ArrayList<>();	
 			for (EtudiantRequest etudiant : etudiants) {
@@ -93,9 +93,9 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 				absence.setDate(seance.getDate());
 				absences.add(absence);
 			}
-			
+			seance.setPasse(true);
 			absenceRepository.saveAll(absences);
-		}	
+			
 	
 	}
 	
