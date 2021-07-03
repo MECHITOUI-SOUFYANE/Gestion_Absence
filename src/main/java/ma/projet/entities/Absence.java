@@ -25,7 +25,7 @@ public class Absence implements Serializable {
 	private Long id;
 	@Temporal(TemporalType.DATE)
 	private Date date;
-	private boolean justifie;
+	private final boolean justifie = false;
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Etudiant etudiant;
 	@ManyToOne

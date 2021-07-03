@@ -42,10 +42,11 @@ public class Seance implements Serializable {
 	@OneToMany(mappedBy="seance",fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Absence> absences = new ArrayList<>();
-	@OneToOne(mappedBy = "seance",fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Salle salle;
 	@OneToOne
 	private Niveau niveau ;
 	@OneToOne
 	private Filiere filiere;
+	private boolean passe ;
 }

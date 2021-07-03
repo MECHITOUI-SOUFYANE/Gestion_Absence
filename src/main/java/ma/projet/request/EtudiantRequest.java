@@ -8,7 +8,4 @@ import lombok.NoArgsConstructor;
 public class EtudiantRequest {
 	
 	private Long idEtudiant;
-	
-	private boolean absence;
-
 }

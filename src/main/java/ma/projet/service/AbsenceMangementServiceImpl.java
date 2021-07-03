@@ -91,7 +91,6 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 				absence.setEtudiant(etudiant);
 				absence.setSeance(seance);
 				absence.setDate(seance.getDate());
-				absence.setJustifie(false);	
 				absences.add(absence);
 			}
 			
@@ -117,7 +116,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		for (Matiere matiere : matieres) {
 			seance = matiere.getSeance().stream().filter(s -> s.getDate().equals(currentDate)
 					&&s.getHeureDebut().before(currentHeure)&&
-					s.getHeureFin().after(currentHeure)).findFirst().orElse(null);
+					s.getHeureFin().after(currentHeure)&&s.isPasse()==false).findFirst().orElse(null);
 			
 			if(seance!=null) {
 				imatiere = matiere;
@@ -154,25 +153,25 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 			 List<Date> dates = new ArrayList<>();
 			for (Matiere matiere : matieres) {
 				for (Seance s : matiere.getSeance()) {
-					dates.add(s.getDate());
+					if(!s.isPasse())dates.add(s.getDate());
 				}
 			}
-			dates = dates.stream().distinct().collect(Collectors.toList());
+			dates = dates.stream().distinct().filter(date->date.compareTo(currentDate)>=0).collect(Collectors.toList());
 			Date mindate =new SimpleDateFormat("yyyy-MM-dd").parse(Collections.min(dates).toString());
 			
 			List<Seance> seances = new ArrayList<>();
 			for (Matiere matiere : matieres) {
-				seances.addAll( matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)).collect(Collectors.toList()));
+				seances.addAll( matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)&&!s.isPasse()).collect(Collectors.toList()));
 			}
 			dates.clear();
 			for (Seance seance2 : seances) {
 				dates.add(seance2.getHeureDebut());
 			}
 			Date minheure = new SimpleDateFormat("HH:mm:ss").parse(Collections.min(dates).toString());
-			
+			System.out.println(mindate+" -- "+minheure);
 			for (Matiere matiere : matieres) {
 				seance = matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)
-						&&s.getHeureDebut().equals(minheure)).findFirst().orElse(null);
+						&&s.getHeureDebut().equals(minheure)&&!s.isPasse()).findFirst().orElse(null);
 				if(seance!=null)break;
 			}
 			SeanceProchaine sp = new SeanceProchaine(seance.getDate(),
@@ -204,7 +203,8 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 								 int nbr = etudiant.getAbsences().stream().filter(absence -> absence.getSeance().getMatiere().equals(matiere)).collect(Collectors.toList()).size();
 								 if(nbr>0) {
 								 EtudiantAbsenceResponse etudiantResponse = new EtudiantAbsenceResponse(); 
-								 etudiantResponse.setCne(etudiant.getCne());   
+								 etudiantResponse.setCne(etudiant.getCne());
+								 etudiantResponse.setId(etudiant.getId());
 								 etudiantResponse.setNom(etudiant.getNom());
 								 etudiantResponse.setPrenom(etudiant.getPrenom());
 								 etudiantResponse.setNombreAbsence((long)nbr);
