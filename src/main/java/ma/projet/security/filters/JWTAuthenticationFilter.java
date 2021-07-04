@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -62,9 +63,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 						 .claim("roles", springUser.getAuthorities())
 						 .compact();
 		System.out.println("successfulAuthentication");
-		response.setHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX+jwt);
-						 
 		
+		Cookie cookie = new Cookie(SecurityConstants.HEADER_STRING,SecurityConstants.TOKEN_PREFIX+jwt);
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);
+		cookie.setMaxAge(864000);
+		response.setHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX+jwt);
+		response.addCookie(cookie);
 	}
 
 }

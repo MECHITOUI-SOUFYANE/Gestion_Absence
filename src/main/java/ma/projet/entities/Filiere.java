@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,10 +28,12 @@ public class Filiere implements Serializable {
 	private Long id;
 	@Column(length = 80)
 	private String nom;
-	@OneToOne
+	@OneToOne(mappedBy = "chefDeFiliere")
+	private Professeur p;
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
-	private Professeur professeur; //chef de filiere
-	@ManyToMany
+	private List<Professeur> professeurs= new ArrayList<>() ; 
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Niveau> niveaus = new ArrayList<>() ;
 }

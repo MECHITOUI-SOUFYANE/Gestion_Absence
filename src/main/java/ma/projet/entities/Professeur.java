@@ -3,11 +3,13 @@ package ma.projet.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -31,17 +33,18 @@ public class Professeur implements Serializable {
 	private String nom;
 	@Column(length = 40)
 	private String prenom;
-	private boolean chefDeFiliere=false;
+	@OneToOne
+	private Filiere chefDeFiliere;
 	@ManyToOne
 	@JsonIgnore
 	private Departement departement;
-	@OneToOne(mappedBy = "professeur")
+	@ManyToMany(mappedBy = "professeurs",cascade = CascadeType.ALL)
 	@JsonIgnore
-	private Filiere filiere ;
-	@OneToMany(mappedBy="professeur")
+	private java.util.List<Filiere>  filieres = new ArrayList<>();
+	@OneToMany(mappedBy="professeur",cascade = CascadeType.ALL)
 	@JsonIgnore
 	private java.util.List<Matiere> matiere = new ArrayList<>();
-	@OneToOne(mappedBy = "professeur")
+	@OneToOne(mappedBy = "professeur",cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Module module;
 	private String image;

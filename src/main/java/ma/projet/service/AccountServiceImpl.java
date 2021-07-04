@@ -1,5 +1,7 @@
 package ma.projet.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import ma.projet.entities.AppRole;
 import ma.projet.entities.AppUser;
 import ma.projet.entities.Professeur;
+import ma.projet.reponse.FiliereResponse;
+import ma.projet.reponse.MatiereResponse;
 import ma.projet.reponse.ProfesseurResponse;
 import ma.projet.repositorie.AppRoleRepository;
 import ma.projet.repositorie.AppUserRepository;
@@ -54,8 +58,27 @@ public class AccountServiceImpl implements AccountService{
 	public ProfesseurResponse getCurrentProfesseur(String username) {
 		Optional<AppUser> appUser = appUserRepository.findByUsername(username);
 		Professeur professeur = professeurRepository.findById(appUser.get().getId()).get();
-		
-		return null;
+		ProfesseurResponse professeurResponse = new ProfesseurResponse();
+		professeurResponse.setSom(professeur.getSom());
+		professeurResponse.setEmail(appUser.get().getUsername());
+		professeurResponse.setNom(professeur.getNom());
+		professeurResponse.setPrenom(professeur.getPrenom());
+		List<FiliereResponse> filiereResponses = new ArrayList<>();
+		professeur.getFilieres().forEach(filiere->{
+			FiliereResponse filiereResponse = new FiliereResponse();
+			filiereResponse.setId(filiere.getId());
+			filiereResponse.setNomFiliere(filiere.getNom());
+			filiereResponses.add(filiereResponse);
+			});
+		List<MatiereResponse> matiereResponses = new ArrayList<>();
+		professeur.getMatiere().forEach(matiere->{
+			MatiereResponse matiereResponse = new MatiereResponse();
+			matiereResponse.setIntitule(matiere.getIntitule());
+			matiereResponses.add(matiereResponse);
+		});
+		professeurResponse.setFiliereResponses(filiereResponses);
+		professeurResponse.setMatiereResponses(matiereResponses);
+		return professeurResponse;
 	}
 
 }

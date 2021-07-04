@@ -32,6 +32,7 @@ import ma.projet.request.EtudiantMatiereRequest;
 import ma.projet.request.EtudiantSeanceRequest;
 import ma.projet.request.ProfesseurRequest;
 import ma.projet.service.AbsenceMangementService;
+import ma.projet.service.AccountService;
 
 @RestController
 public class ProfesseurController {
@@ -42,6 +43,8 @@ public class ProfesseurController {
 	private ProfesseurRepository professeurRepository;
 	@Autowired
 	private AppUserRepository appUserRepository;
+	@Autowired
+	private AccountService accountService;
 
 	@PostMapping("/professeur/absence")
 	public ResponseEntity<List<Absence>> absence(@RequestBody EtudiantSeanceRequest etudiantSeanceRequest) {
@@ -62,6 +65,10 @@ public class ProfesseurController {
 		Path path = Paths.get(file.toURI());
 		System.out.println(path.toString());
 		return Files.readAllBytes(path);
+	}
+	@GetMapping(path = "/professeur/information")
+	public ResponseEntity<ProfesseurResponse> getCurrentProfesseurInformation(Principal principal){
+		return new ResponseEntity<>(accountService.getCurrentProfesseur(principal.getName()),HttpStatus.OK);
 	}
 	@PostMapping(path = "/admin/create", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_XML_VALUE,
