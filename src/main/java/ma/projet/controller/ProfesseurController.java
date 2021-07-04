@@ -1,5 +1,9 @@
 package ma.projet.controller;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.ParseException;
 import java.util.List;
@@ -22,6 +26,8 @@ import ma.projet.entities.Absence;
 import ma.projet.reponse.AbsenceParMatiere;
 import ma.projet.reponse.ProfesseurResponse;
 import ma.projet.reponse.SeanceDetailsResponse;
+import ma.projet.repositorie.AppUserRepository;
+import ma.projet.repositorie.ProfesseurRepository;
 import ma.projet.request.EtudiantMatiereRequest;
 import ma.projet.request.EtudiantSeanceRequest;
 import ma.projet.request.ProfesseurRequest;
@@ -32,6 +38,10 @@ public class ProfesseurController {
 
 	@Autowired
 	private AbsenceMangementService absenceMangementService;
+	@Autowired
+	private ProfesseurRepository professeurRepository;
+	@Autowired
+	private AppUserRepository appUserRepository;
 
 	@PostMapping("/professeur/absence")
 	public ResponseEntity<List<Absence>> absence(@RequestBody EtudiantSeanceRequest etudiantSeanceRequest) {
@@ -45,7 +55,14 @@ public class ProfesseurController {
 		return new ResponseEntity<>(HttpStatus.OK);
 
 	}
-
+	@GetMapping(path="/professeur/image",produces = { MediaType.IMAGE_JPEG_VALUE })
+	public byte[] getImage (Principal principale) throws Exception {
+		String image = professeurRepository.findById(appUserRepository.findByUsername(principale.getName()).get().getId()).get().getImage();	
+		File file = new File(System.getProperty("user.home")+"/Desktop/"+image);
+		Path path = Paths.get(file.toURI());
+		System.out.println(path.toString());
+		return Files.readAllBytes(path);
+	}
 	@PostMapping(path = "/admin/create", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_XML_VALUE,
 					MediaType.APPLICATION_JSON_VALUE })

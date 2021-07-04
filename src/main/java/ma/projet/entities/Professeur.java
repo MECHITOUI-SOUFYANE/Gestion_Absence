@@ -43,7 +43,8 @@ public class Professeur implements Serializable {
 	private java.util.List<Matiere> matiere = new ArrayList<>();
 	@OneToOne(mappedBy = "professeur")
 	@JsonIgnore
-	private Module module;	
+	private Module module;
+	private String image;
 	public String toString() {
 		return "id : "+id+"  nom : "+nom;
 	}
