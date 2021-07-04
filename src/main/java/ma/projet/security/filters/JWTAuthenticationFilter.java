@@ -46,7 +46,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		Authentication auth = authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
 		);
-		System.out.println(auth.isAuthenticated());
+		System.out.println("isAuthenticated : "+auth.isAuthenticated());
 
 		return auth;
 	}
@@ -61,6 +61,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 						 .setExpiration(new Date(System.currentTimeMillis()+SecurityConstants.EXPIRATION_TIME))
 						 .claim("roles", springUser.getAuthorities())
 						 .compact();
+		System.out.println("successfulAuthentication");
 		response.setHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX+jwt);
 						 
 		

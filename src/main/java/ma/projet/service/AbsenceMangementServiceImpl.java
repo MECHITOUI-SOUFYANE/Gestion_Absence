@@ -156,30 +156,35 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 					if(!s.isPasse())dates.add(s.getDate());
 				}
 			}
-			dates = dates.stream().distinct().filter(date->date.compareTo(currentDate)>=0).collect(Collectors.toList());
-			Date mindate =new SimpleDateFormat("yyyy-MM-dd").parse(Collections.min(dates).toString());
+			if(dates.size()>0) {
+				dates = dates.stream().distinct().filter(date->date.compareTo(currentDate)>=0).collect(Collectors.toList());
+				Date mindate =new SimpleDateFormat("yyyy-MM-dd").parse(Collections.min(dates).toString());
+				
+				List<Seance> seances = new ArrayList<>();
+				for (Matiere matiere : matieres) {
+					seances.addAll( matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)&&!s.isPasse()).collect(Collectors.toList()));
+				}
+				dates.clear();
+				for (Seance seance2 : seances) {
+					dates.add(seance2.getHeureDebut());
+				}
+				Date minheure = new SimpleDateFormat("HH:mm:ss").parse(Collections.min(dates).toString());
+				System.out.println(mindate+" -- "+minheure);
+				for (Matiere matiere : matieres) {
+					seance = matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)
+							&&s.getHeureDebut().equals(minheure)&&!s.isPasse()).findFirst().orElse(null);
+					if(seance!=null)break;
+				}
+				SeanceProchaine sp = new SeanceProchaine(seance.getDate(),
+														seance.getHeureDebut(),
+														seance.getSalle().getBloc()+"-"+seance.getSalle().getNomSalle() ,
+														seance.getFiliere().getNom()+" "+seance.getNiveau().getNomDeNiveau(),
+														seance.getMatiere().getModule().getNom()+" : "+seance.getMatiere().getIntitule()+" - "+seance.getNature());
+				seanceDetailsResponse.setSeanceProchaine(sp);
+			}else{
+				seanceDetailsResponse.setSeanceProchaine(new SeanceProchaine());
+			}
 			
-			List<Seance> seances = new ArrayList<>();
-			for (Matiere matiere : matieres) {
-				seances.addAll( matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)&&!s.isPasse()).collect(Collectors.toList()));
-			}
-			dates.clear();
-			for (Seance seance2 : seances) {
-				dates.add(seance2.getHeureDebut());
-			}
-			Date minheure = new SimpleDateFormat("HH:mm:ss").parse(Collections.min(dates).toString());
-			System.out.println(mindate+" -- "+minheure);
-			for (Matiere matiere : matieres) {
-				seance = matiere.getSeance().stream().filter(s -> s.getDate().equals(mindate)
-						&&s.getHeureDebut().equals(minheure)&&!s.isPasse()).findFirst().orElse(null);
-				if(seance!=null)break;
-			}
-			SeanceProchaine sp = new SeanceProchaine(seance.getDate(),
-													seance.getHeureDebut(),
-													seance.getSalle().getBloc()+"-"+seance.getSalle().getNomSalle() ,
-													seance.getFiliere().getNom()+" "+seance.getNiveau().getNomDeNiveau(),
-													seance.getMatiere().getModule().getNom()+" : "+seance.getMatiere().getIntitule()+" - "+seance.getNature());
-			seanceDetailsResponse.setSeanceProchaine(sp);
 			}
 		
 		return seanceDetailsResponse;
