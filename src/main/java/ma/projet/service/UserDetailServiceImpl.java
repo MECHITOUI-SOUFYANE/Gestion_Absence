@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import ma.projet.entities.AppUser;
 import ma.projet.repositorie.AppUserRepository;
@@ -27,7 +26,6 @@ public class UserDetailServiceImpl implements UserDetailsService{
 		user.orElseThrow(() -> new UsernameNotFoundException("No User Found"));
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		user.get().getRoles().forEach((role) -> authorities.add(new SimpleGrantedAuthority(role.getRolename())));
-		System.out.println(new BCryptPasswordEncoder().matches("12345", user.get().getPassword()));
 		return new User(username, user.get().getPassword(), authorities);
 	}
 
