@@ -78,6 +78,7 @@ public class AccountServiceImpl implements AccountService{
 		});
 		professeurResponse.setFiliereResponses(filiereResponses);
 		professeurResponse.setMatiereResponses(matiereResponses);
+		
 		return professeurResponse;
 	}
 
