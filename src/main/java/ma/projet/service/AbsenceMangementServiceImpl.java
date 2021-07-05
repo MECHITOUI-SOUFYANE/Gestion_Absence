@@ -221,7 +221,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 			absenceParMatiere.add(new AbsenceParMatiere(matiere.getIntitule(), matiere.getId(), etudiantAbsenceResponses));
 		});
 		
-		System.out.println("fin");
+			System.out.println("fin");
 		
 		return absenceParMatiere;
 	}

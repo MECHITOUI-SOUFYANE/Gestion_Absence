@@ -78,7 +78,8 @@ public class AccountServiceImpl implements AccountService{
 		});
 		professeurResponse.setFiliereResponses(filiereResponses);
 		professeurResponse.setMatiereResponses(matiereResponses);
-		
+		if(professeur.getChefDeFiliere()!=null)
+			professeurResponse.setChefDeFiliere(professeur.getChefDeFiliere().getNom());
 		return professeurResponse;
 	}
 

@@ -13,6 +13,7 @@ public class ProfesseurResponse {
 	private String nom;
 	private String prenom;
 	private String email;
+	private String chefDeFiliere;
 	private List<FiliereResponse> filiereResponses = new ArrayList<>();
 	private List<MatiereResponse> matiereResponses = new ArrayList<>();
 }
