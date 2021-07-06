@@ -236,7 +236,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 							});
 
 					if(etudiantAbsenceResponses.size()>0)absenceParMatiere.add(
-							new AbsenceParMatiere(matiere.getIntitule(), matiere.getId(), etudiantAbsenceResponses));
+							new AbsenceParMatiere(matiere.getModule().getNom() +"--"+matiere.getIntitule()+" : "+p.getNom()+" "+p.getPrenom(), matiere.getId(), etudiantAbsenceResponses));
 				});
 			});
 
@@ -300,6 +300,13 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 		return etudiant.getAbsences().stream().filter(absence -> absence.getSeance().getMatiere().equals(matiere))
 				.collect(Collectors.toList());
 
+	}
+
+	@Override
+	public Absence updateAbsence(Long id) {
+		Absence absence = absenceRepository.findById(id).get();
+		absence.setJustifie(true);
+		return absence;
 	}
 
 }

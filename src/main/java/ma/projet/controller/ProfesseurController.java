@@ -109,4 +109,9 @@ public class ProfesseurController {
 		
 	}
 	
+	@PostMapping("/absence/update")
+	public ResponseEntity<Absence> updateAbsence(@RequestBody Long id){
+		return new ResponseEntity<Absence>(absenceMangementService.updateAbsence(id), HttpStatus.ACCEPTED);
+	}
+	
 }
