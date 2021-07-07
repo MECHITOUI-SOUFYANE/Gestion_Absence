@@ -45,8 +45,10 @@ public class Seance implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	private Salle salle;
 	@OneToOne
+	@JsonIgnore
 	private Niveau niveau ;
 	@OneToOne
+	@JsonIgnore
 	private Filiere filiere;
 	private boolean passe ;
 }

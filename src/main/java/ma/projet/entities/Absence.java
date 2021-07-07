@@ -31,6 +31,5 @@ public class Absence implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Etudiant etudiant;
 	@ManyToOne
-	@JsonIgnore
 	private Seance seance;
 }

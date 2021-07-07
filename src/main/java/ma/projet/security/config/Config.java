@@ -32,6 +32,8 @@ public class Config extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.headers().frameOptions().disable();
+		http.authorizeRequests().antMatchers("/v2/api-docs","/swagger-resources/**","/swagger-ui.html**"
+											,"/webjars/**").permitAll();
 		http.addFilter(jWTAuthenticationFilter())
 			.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

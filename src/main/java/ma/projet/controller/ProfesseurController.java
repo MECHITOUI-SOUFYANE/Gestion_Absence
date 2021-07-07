@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -105,7 +106,7 @@ public class ProfesseurController {
 		
 	}
 																	
-	@PostMapping(path="/absence/update")
+	@PutMapping(path="/absence/update")
 	public ResponseEntity<Absence> updateAbsence(@RequestBody AbsenceRequestUpdate idAbsence,Principal principal){
 		return new ResponseEntity<Absence>(absenceMangementService.updateAbsence(idAbsence.getId(),principal.getName()), HttpStatus.ACCEPTED);
 	}
