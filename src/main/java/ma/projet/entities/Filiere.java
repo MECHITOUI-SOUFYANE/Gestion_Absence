@@ -29,6 +29,7 @@ public class Filiere implements Serializable {
 	@Column(length = 80)
 	private String nom;
 	@OneToOne(mappedBy = "chefDeFiliere")
+	@JsonIgnore
 	private Professeur p;
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
