@@ -170,7 +170,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 						break;
 				}
 				SeanceProchaine sp = new SeanceProchaine(seance.getDate(), seance.getHeureDebut(),
-						seance.getSalle().getBloc() + "-" + seance.getSalle().getNomSalle(),
+						seance.getSalle().getBloc() + "" + seance.getSalle().getNomSalle(),
 						seance.getFiliere().getNom() + " " + seance.getNiveau().getNomDeNiveau(),
 						seance.getMatiere().getModule().getNom() + " : " + seance.getMatiere().getIntitule() + " - "
 								+ seance.getNature());
@@ -236,7 +236,7 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 							});
 
 					if(etudiantAbsenceResponses.size()>0)absenceParMatiere.add(
-							new AbsenceParMatiere(matiere.getModule().getNom() +"--"+matiere.getIntitule()+" : "+p.getNom()+" "+p.getPrenom(), matiere.getId(), etudiantAbsenceResponses));
+							new AbsenceParMatiere(matiere.getModule().getNom() +" - "+matiere.getIntitule()+" : "+p.getNom()+" "+p.getPrenom(), matiere.getId(), etudiantAbsenceResponses));
 				});
 			});
 
@@ -292,19 +292,35 @@ public class AbsenceMangementServiceImpl implements AbsenceMangementService {
 	}
 
 	@Override
-	public List<Absence> getAbsencesInSeanceOfEtudiant(EtudiantMatiereRequest etudiantMatiereRequest) {
-
+	public List<Absence> getAbsencesInSeanceOfEtudiant(EtudiantMatiereRequest etudiantMatiereRequest,String username) {
+		Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+		Optional<Professeur> professeur = professeurRepository.findById(appUser.get().getId());
+ 		List<Matiere> matieres = matiereRepository.findByProfesseur(professeur.get());
 		Etudiant etudiant = etudiantRepository.findById(etudiantMatiereRequest.getIdEtudiant()).get();
 		Matiere matiere = matiereRepository.findById(etudiantMatiereRequest.getIdMatiere()).get();
 
+		if(matieres.contains(matiere))
 		return etudiant.getAbsences().stream().filter(absence -> absence.getSeance().getMatiere().equals(matiere))
 				.collect(Collectors.toList());
+		
+		else if(professeur.get().getChefDeFiliere()!=null) {
+			if(professeur.get().getChefDeFiliere().getProfesseurs().stream().filter(p->p.getMatiere().contains(matiere))!=null) {
+				return etudiant.getAbsences().stream().filter(absence -> absence.getSeance().getMatiere().equals(matiere))
+						.collect(Collectors.toList());
+			}
+			return null;
+		}else {
+			return null;
+		}
 
 	}
 
 	@Override
-	public Absence updateAbsence(Long id) {
+	public Absence updateAbsence(Long id,String username) {
+		Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+		Optional<Professeur> professeur = professeurRepository.findById(appUser.get().getId());
 		Absence absence = absenceRepository.findById(id).get();
+		if(professeur.get().getMatiere().contains(absence.getSeance().getMatiere()))
 		absence.setJustifie(true);
 		return absence;
 	}

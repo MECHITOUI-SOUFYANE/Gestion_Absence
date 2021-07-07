@@ -18,7 +18,7 @@ public class SeanceProchaine implements Serializable {
 	
 	
 	public SeanceProchaine(){
-		this.str="vous ne reste pas une seance";
+		this.str="il ne reste pas une seance";
 	}
 
 

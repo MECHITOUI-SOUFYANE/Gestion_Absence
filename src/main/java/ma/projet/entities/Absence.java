@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,5 +31,6 @@ public class Absence implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Etudiant etudiant;
 	@ManyToOne
+	@JsonIgnore
 	private Seance seance;
 }

@@ -18,6 +18,6 @@ public interface AbsenceMangementService {
 	List<AbsenceParMatiere> getAbsencesEtudiant(String username);
 	void  setAbsence(List<EtudiantRequest> etudiants , Long idSeance);
 	AbsenceParMatiere getEtudiant(String username) throws ParseException;
-	List<Absence> getAbsencesInSeanceOfEtudiant(EtudiantMatiereRequest etudiantMatiereRequest);
-	Absence updateAbsence(Long id);
+	List<Absence> getAbsencesInSeanceOfEtudiant(EtudiantMatiereRequest etudiantMatiereRequest, String username);
+	Absence updateAbsence(Long id,String username);
 }

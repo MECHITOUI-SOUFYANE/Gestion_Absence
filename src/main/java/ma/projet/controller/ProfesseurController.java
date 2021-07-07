@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ma.projet.dto.ProfesseurDto;
 import ma.projet.entities.Absence;
 import ma.projet.reponse.AbsenceParMatiere;
@@ -28,6 +25,7 @@ import ma.projet.reponse.ProfesseurResponse;
 import ma.projet.reponse.SeanceDetailsResponse;
 import ma.projet.repositorie.AppUserRepository;
 import ma.projet.repositorie.ProfesseurRepository;
+import ma.projet.request.AbsenceRequestUpdate;
 import ma.projet.request.EtudiantMatiereRequest;
 import ma.projet.request.EtudiantSeanceRequest;
 import ma.projet.request.ProfesseurRequest;
@@ -80,10 +78,8 @@ public class ProfesseurController {
 	}
 
 	@GetMapping(path = "/professeur/etudiants", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<SeanceDetailsResponse> getEtudiants(Principal principal)
-			throws ParseException, JsonProcessingException {
+	public ResponseEntity<SeanceDetailsResponse> getEtudiants(Principal principal) throws Exception {
 		SeanceDetailsResponse seanceDetailsResponse = absenceMangementService.getEtudiantsByProf(principal.getName());
-		System.out.println(new ObjectMapper().writeValueAsString(seanceDetailsResponse));
 		return new ResponseEntity<>(seanceDetailsResponse, HttpStatus.OK);
 	}
 
@@ -104,14 +100,14 @@ public class ProfesseurController {
 		
 	}
 	@PostMapping(path="/matiere/etudiant/absence/detaills")
-	public ResponseEntity<List<Absence>> getAbsenceAndSeanceOfEtudiant(@RequestBody	EtudiantMatiereRequest etudiantMatiereRequest){
-		return new ResponseEntity<List<Absence>>(absenceMangementService.getAbsencesInSeanceOfEtudiant(etudiantMatiereRequest),HttpStatus.OK);
+	public ResponseEntity<List<Absence>> getAbsenceAndSeanceOfEtudiant(@RequestBody	EtudiantMatiereRequest etudiantMatiereRequest,Principal principal){
+		return new ResponseEntity<List<Absence>>(absenceMangementService.getAbsencesInSeanceOfEtudiant(etudiantMatiereRequest,principal.getName()),HttpStatus.OK);
 		
 	}
-	
-	@PostMapping("/absence/update")
-	public ResponseEntity<Absence> updateAbsence(@RequestBody Long id){
-		return new ResponseEntity<Absence>(absenceMangementService.updateAbsence(id), HttpStatus.ACCEPTED);
+																	
+	@PostMapping(path="/absence/update")
+	public ResponseEntity<Absence> updateAbsence(@RequestBody AbsenceRequestUpdate idAbsence,Principal principal){
+		return new ResponseEntity<Absence>(absenceMangementService.updateAbsence(idAbsence.getId(),principal.getName()), HttpStatus.ACCEPTED);
 	}
 	
 }
